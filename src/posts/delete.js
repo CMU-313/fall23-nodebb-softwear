@@ -151,6 +151,8 @@ module.exports = function (Posts) {
         await Promise.all(uniqCids.map(categories.updateRecentTidForCid));
     }
 
+    // TODO: add deleteEndorsed
+
     async function deleteFromUsersBookmarks(pids) {
         const arrayOfUids = await db.getSetsMembers(pids.map(pid => `pid:${pid}:users_bookmarked`));
         const bulkRemove = [];

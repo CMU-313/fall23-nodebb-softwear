@@ -8,13 +8,13 @@ interface PostHandlerType {
     endorse: (pid: number, uid: number) => Promise<ToggleEndorseResult>;
     unendorse: (pid: number, uid: number) => Promise<ToggleEndorseResult>;
     getPostFields: (pid: number, field: string[]) => Promise<PostData>;
-    hasEndorsed: (pid: NumberOrNumberArr, uid: number) => Promise<BoolOrBoolArr>;
+    hasEndorsed: (pid: NumberOrNumberArr) => Promise<BoolOrBoolArr>;
     setPostField: (pid: number, field: string, data: NumberOrNumberArr) => Promise<void>;
 }
 
 interface PostData {
     pid: number;
-    uid: number;
+    // uid: number;
     endorse?: NumberOrNumberArr;
 }
 
@@ -35,8 +35,8 @@ export = function (Posts: PostHandlerType) {
         const isEndorsing = type === 'endorse';
 
         const [postData, hasEndorsed] = await Promise.all([
-            Posts.getPostFields(pid, ['pid', 'uid']),
-            Posts.hasEndorsed(pid, uid),
+            Posts.getPostFields(pid, ['pid']),
+            Posts.hasEndorsed(pid),
         ]);
 
         if (isEndorsing && hasEndorsed) {
@@ -47,21 +47,21 @@ export = function (Posts: PostHandlerType) {
             throw new Error('[[error:already-unendorsed]]');
         }
 
-        if (isEndorsing) {
-            // The next line calls a function in a module that has not been updated to TS yet
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            await db.sortedSetAdd(`uid:${uid}:endorse`, Date.now(), pid);
-        } else {
-            // The next line calls a function in a module that has not been updated to TS yet
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            await db.sortedSetRemove(`uid:${uid}:endorse`, pid);
-        }
+        // if (isEndorsing) {
+        //     // The next line calls a function in a module that has not been updated to TS yet
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        //     await db.sortedSetAdd(`uid:${uid}:endorse`, Date.now(), pid);
+        // } else {
+        //     // The next line calls a function in a module that has not been updated to TS yet
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        //     await db.sortedSetRemove(`uid:${uid}:endorse`, pid);
+        // }
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:users_endorsed`, uid);
+        await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:endorsements`);
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        postData.endorse = await db.setCount(`pid:${pid}:users_endorsed`); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+        postData.endorse = await db.setCount(`pid:${pid}:endorsements`);// eslint-disable-line @typescript-eslint/no-unsafe-assignment
         await Posts.setPostField(pid, 'endorse', postData.endorse);
 
         // await plugins.hooks.fire(`action:post.${type}`, {
@@ -85,19 +85,21 @@ export = function (Posts: PostHandlerType) {
         return await toggleEndorse('unendorse', pid, uid);
     };
 
-    Posts.hasEndorsed = async function (pid, uid): Promise<BoolOrBoolArr> {
-        if (parseInt(String(uid), 10) <= 0) {
-            return Array.isArray(pid) ? pid.map(() => false) : false;
-        }
+    Posts.hasEndorsed = async function (pid): Promise<BoolOrBoolArr> {
+        // if (parseInt(String(uid), 10) <= 0) {
+        //     return Array.isArray(pid) ? pid.map(() => false) : false;
+        // }
 
         if (Array.isArray(pid)) {
-            const sets = pid.map(pid => `pid:${pid}:users_endorsed`);
+            const sets = pid.map(pid => `pid:${pid}:endorsements`);
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            return await db.isMemberOfSets(sets, uid); // eslint-disable-line @typescript-eslint/no-unsafe-return
+            // return await db.isMemberOfSets(sets, uid); // eslint-disable-line @typescript-eslint/no-unsafe-return
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+            return await db.isMemberOfSets(sets); // eslint-disable-line @typescript-eslint/no-unsafe-return
         }
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        return await db.isSetMember(`pid:${pid}:users_endorsed`, uid); // eslint-disable-line @typescript-eslint/no-unsafe-return
+        return await db.isSetMember(`pid:${pid}:endorsements`); // eslint-disable-line @typescript-eslint/no-unsafe-return
     };
 }

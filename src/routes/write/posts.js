@@ -27,6 +27,8 @@ module.exports = function () {
     setupApiRoute(router, 'delete', '/:pid/bookmark', [...middlewares, middleware.assert.post], controllers.write.posts.unbookmark);
 
     // TODO: add api route for endorse
+    setupApiRoute(router, 'put', '/:pid/endorse', [...middlewares, middleware.assert.post], controllers.write.posts.endorse);
+    setupApiRoute(router, 'delete', '/:pid/endorse', [...middlewares, middleware.assert.post], controllers.write.posts.unendorse);
 
     setupApiRoute(router, 'get', '/:pid/diffs', [middleware.assert.post], controllers.write.posts.getDiffs);
     setupApiRoute(router, 'get', '/:pid/diffs/:since', [middleware.assert.post], controllers.write.posts.loadDiff);

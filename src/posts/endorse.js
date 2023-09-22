@@ -48,8 +48,8 @@ module.exports = function (Posts) {
         }
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:users_endorsed`, uid);
-        postData.endorse = await db.setCount(`pid:${pid}:users_endorsed`);
-        await Posts.setPostField(pid, 'endorse', postData.endorse);
+        postData.endorsements = await db.setCount(`pid:${pid}:users_endorsed`);
+        await Posts.setPostField(pid, 'endorsements', postData.endorsements);
 
         return {
             post: postData,

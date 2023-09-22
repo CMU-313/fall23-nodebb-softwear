@@ -36,7 +36,7 @@ module.exports = function (Posts) {
 
         const [postData, hasEndorsed] = await Promise.all([
             Posts.getPostFields(pid, ['pid']),
-            Posts.hasEndorsed(pid),
+            Posts.hasEndorsed(pid, uid),
         ]);
 
         if (isEndorsing && hasEndorsed) {
@@ -47,10 +47,8 @@ module.exports = function (Posts) {
             throw new Error('[[error:already-unendorsed]]');
         }
 
-        await db[isEndorsing ? 'setAdd' : 'setRemove'](
-            `pid:${pid}:endorsements`
-        );
-        postData.endorse = await db.setCount(`pid:${pid}:endorsements`);
+        await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:users_endorsed`, uid);
+        postData.endorse = await db.setCount(`pid:${pid}:users_endorsed`);
         await Posts.setPostField(pid, 'endorse', postData.endorse);
 
         return {
@@ -70,11 +68,7 @@ module.exports = function (Posts) {
     };
 
     // Posts.hasEndorsed = async function (pid): Promise<BoolOrBoolArr> {
-    Posts.hasEndorsed = async function (pid) {
-        if (Array.isArray(pid)) {
-            const sets = pid.map(pid => `pid:${pid}:endorsements`);
-            return await db.isMemberOfSets(sets);
-        }
-        return await db.isSetMember(`pid:${pid}:endorsements`);
+    Posts.hasEndorsed = async function (pid, uid) {
+        return await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
     };
 };

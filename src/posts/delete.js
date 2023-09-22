@@ -157,7 +157,7 @@ module.exports = function (Posts) {
         await Promise.all([
             // db.sortedSetRemoveBulk(bulkRemove),
             db.deleteAll([
-                ...pids.map(pid => `pid:${pid}:endorsements`),
+                ...pids.map(pid => `pid:${pid}:users_endorsed`),
                 // ...pids.map(pid => `pid:${pid}:downvote`),
             ]),
         ]);

@@ -64,7 +64,7 @@
         
         <ul component="topic" class="posts timeline" data-tid="{tid}" data-cid="{cid}">
             {{{each posts}}}
-                {{{if posts.isEndorsed}}}
+                {{{if posts.hasEndorsed}}}
                 <li component="post" style="background-color:#F8FFEE;" class="{{{ if posts.deleted }}}deleted{{{ end }}} {{{ if posts.selfPost }}}self-post{{{ end }}} {{{ if posts.topicOwnerPost }}}topic-owner-post{{{ end }}}" <!-- IMPORT partials/data/topic.tpl -->>
                     <a component="post/anchor" data-index="{posts.index}" id="{posts.index}"></a>
 

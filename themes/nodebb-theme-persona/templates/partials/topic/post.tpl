@@ -53,6 +53,10 @@
     {posts.content}
 </div>
 
+<div style="text-align:center; color=#1CC000; font-weight:bold;">
+    <span>~ Instructor has marked this answer correct ~</span>
+</div>
+
 <div class="post-footer">
     {{{ if posts.user.signature }}}
     <div component="post/signature" data-uid="{posts.user.uid}" class="post-signature">{posts.user.signature}</div>

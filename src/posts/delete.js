@@ -78,6 +78,7 @@ module.exports = function (Posts) {
             deleteFromUsersVotes(pids),
             deleteFromReplies(postData),
             deleteFromGroups(pids),
+            deleteEndorsed(pids),
             deleteDiffs(pids),
             deleteFromUploads(pids),
             db.sortedSetsRemove(['posts:pid', 'posts:votes', 'posts:flagged'], pids),
@@ -149,6 +150,17 @@ module.exports = function (Posts) {
         const sets = uniqCids.map(cid => `cid:${cid}:pids`);
         await db.sortedSetRemove(sets, postData.map(p => p.pid));
         await Promise.all(uniqCids.map(categories.updateRecentTidForCid));
+    }
+
+    // TODO: add deleteEndorsed
+    async function deleteEndorsed(pids) {
+        await Promise.all([
+            // db.sortedSetRemoveBulk(bulkRemove),
+            db.deleteAll([
+                ...pids.map(pid => `pid:${pid}:users_endorsed`),
+                // ...pids.map(pid => `pid:${pid}:downvote`),
+            ]),
+        ]);
     }
 
     async function deleteFromUsersBookmarks(pids) {

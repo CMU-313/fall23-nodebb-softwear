@@ -323,7 +323,7 @@ describe('Post\'s', () => {
                 return assert.equal(err.message, '[[error:not-instructor]]');
             }
         });
-        
+
         it('should endorse a post if the endorser is admin', async () => {
             const data = await apiPosts.endorse({ uid: adminUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
             assert.equal(data.isEndorsed, true);

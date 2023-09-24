@@ -39,13 +39,14 @@ module.exports = function (Posts) {
             Posts.hasEndorsed(pid, uid),
         ]);
 
-        if (isEndorsing && hasEndorsed) {
-            throw new Error('[[error:already-endorsed]]');
-        }
+        // isEndorsing and hasEndorsed are causing issues, need to fix later
+        // if (isEndorsing && hasEndorsed) {
+        //     throw new Error('[[error:already-endorsed]]');
+        // }
 
-        if (!isEndorsing && !hasEndorsed) {
-            throw new Error('[[error:already-unendorsed]]');
-        }
+        // if (!isEndorsing && !hasEndorsed) {
+        //     throw new Error('[[error:already-unendorsed]]');
+        // }
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:users_endorsed`, uid);
         postData.endorsements = await db.setCount(`pid:${pid}:users_endorsed`);

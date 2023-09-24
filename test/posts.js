@@ -27,7 +27,7 @@ const helpers = require('./helpers');
 describe('Post\'s', () => {
     let voterUid;
     let voteeUid;
-    let adminUid;
+    let instructorUid;
     let globalModUid;
     let postData;
     let topicData;
@@ -38,7 +38,7 @@ describe('Post\'s', () => {
             voterUid: function (next) {
                 user.create({ username: 'upvoter' }, next);
             },
-            adminUid: function (next) {
+            instructorUid: function (next) {
                 user.create({ username: 'admin' }, next);
             },
             voteeUid: function (next) {
@@ -60,7 +60,7 @@ describe('Post\'s', () => {
 
             voterUid = results.voterUid;
             voteeUid = results.voteeUid;
-            adminUid = results.adminUid;
+            instructorUid = results.instructorUid;
             globalModUid = results.globalModUid;
             cid = results.category.cid;
 
@@ -75,7 +75,7 @@ describe('Post\'s', () => {
                 }
                 postData = data.postData;
                 topicData = data.topicData;
-                groups.join('administrators', adminUid);
+                groups.join('instructors', instructorUid);
                 groups.join('Global Moderators', globalModUid, done);
             });
         });
@@ -308,7 +308,7 @@ describe('Post\'s', () => {
     });
 
     describe('endorsing', () => {
-        it('should not endorse a post if the endorser is not admin', async () => {
+        it('should not endorse a post if the endorser is not instructor', async () => {
             try {
                 await apiPosts.endorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
             } catch (err) {
@@ -316,7 +316,7 @@ describe('Post\'s', () => {
             }
         });
 
-        it('should not unendorse a post if the endorser is not admin', async () => {
+        it('should not unendorse a post if the endorser is not instructor', async () => {
             try {
                 await apiPosts.unendorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
             } catch (err) {
@@ -324,17 +324,17 @@ describe('Post\'s', () => {
             }
         });
 
-        it('should endorse a post if the endorser is admin', async () => {
-            const data = await apiPosts.endorse({ uid: adminUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
+        it('should endorse a post if the endorser is instructor', async () => {
+            const data = await apiPosts.endorse({ uid: instructorUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
             assert.equal(data.isEndorsed, true);
-            const hasEndorsed = await posts.hasEndorsed(postData.pid, adminUid);
+            const hasEndorsed = await posts.hasEndorsed(postData.pid, instructorUid);
             assert.equal(hasEndorsed, true);
         });
 
-        it('should unendorse a post if the endorser is admin', async () => {
-            const data = await apiPosts.unendorse({ uid: adminUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
+        it('should unendorse a post if the endorser is instructor', async () => {
+            const data = await apiPosts.unendorse({ uid: instructorUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
             assert.equal(data.isEndorsed, false);
-            const hasEndorsed = await posts.hasEndorsed(postData.pid, adminUid);
+            const hasEndorsed = await posts.hasEndorsed(postData.pid, instructorUid);
             assert.equal(hasEndorsed, false);
         });
     });

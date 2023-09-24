@@ -62,22 +62,24 @@ module.exports = function (Posts) {
 
     // Posts.endorse = async function (pid: number, uid: number) {
     Posts.endorse = async function (pid, uid) {
+        const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
-        if (isAdmin) {
+        if (isInstr || isAdmin) {
             return await toggleEndorse('endorse', pid, uid);
         }
-        if (!isAdmin) {
+        if (!isInstr && !isAdmin) {
             throw new Error('[[error:not-instructor]]');
         }
     };
 
     // Posts.unendorse = async function (pid: number, uid: number) {
     Posts.unendorse = async function (pid, uid) {
+        const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
-        if (isAdmin) {
+        if (isInstr || isAdmin) {
             return await toggleEndorse('unendorse', pid, uid);
         }
-        if (!isAdmin) {
+        if (!isInstr && !isAdmin) {
             throw new Error('[[error:not-instructor]]');
         }
     };

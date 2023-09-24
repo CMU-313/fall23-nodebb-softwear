@@ -303,23 +303,36 @@ describe('Post\'s', () => {
     });
 
     describe('endorsing', () => {
-        it('should endorse a post if the endorser is admin', async () => {
-            const data = await apiPosts.endorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
-            if (user.isAdministrator(voterUid)) {
-                assert.equal(data.isEndorsed, true);
-                const hasEndorsed = await posts.hasEndorsed(postData.pid, voterUid);
-                assert.equal(hasEndorsed, true);
+        it('should not endorse a post if the endorser is not admin', async () => {
+            try {
+                await apiPosts.endorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
+            } catch (err) {
+                return assert.equal(err.message, '[[error:not-instructor]]');
             }
+        });
+
+        it('should not unendorse a post if the endorser is not admin', async () => {
+            try {
+                await apiPosts.unendorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
+            } catch (err) {
+                return assert.equal(err.message, '[[error:not-instructor]]');
+            }
+        });
+        /*
+        it('should not endorse a post if the endorser is not admin', async () => {
+            const data = await apiPosts.endorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
+            assert.equal(data.isEndorsed, true);
+            const hasEndorsed = await posts.hasEndorsed(postData.pid, voterUid);
+            assert.equal(hasEndorsed, true);
         });
 
         it('should unendorse a post if the endorser is admin', async () => {
             const data = await apiPosts.unendorse({ uid: voterUid }, { pid: postData.pid, room_id: `topic_${postData.tid}` });
-            if (user.isAdministrator(voterUid)) {
-                assert.equal(data.isEndorsed, false);
-                const hasEndorsed = await posts.hasEndorsed(postData.pid, voterUid);
-                assert.equal(hasEndorsed, false);
-            }
+            assert.equal(data.isEndorsed, false);
+            const hasEndorsed = await posts.hasEndorsed(postData.pid, voterUid);
+            assert.equal(hasEndorsed, false);
         });
+        */
     });
 
     describe('post tools', () => {

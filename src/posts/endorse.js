@@ -65,7 +65,7 @@ module.exports = function (Posts) {
         const isAdmin = await user.isAdministrator(uid);
         if (isAdmin) {
             return await toggleEndorse('endorse', pid, uid);
-        } 
+        }
         if (!isAdmin) {
             throw new Error('[[error:not-instructor]]');
         }

@@ -34,6 +34,7 @@ module.exports = function (Posts) {
 
         const isEndorsing = type === 'endorse';
 
+        // eslint-disable-next-line no-unused-vars
         const [postData, hasEndorsed] = await Promise.all([
             Posts.getPostFields(pid, ['pid']),
             Posts.hasEndorsed(pid, uid),

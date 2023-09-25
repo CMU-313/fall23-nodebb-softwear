@@ -2,6 +2,7 @@
 
 // import db from '../database';
 const db = require('../database');
+const user = require('../user');
 
 // interface PostHandlerType {
 //     endorse: (pid: number, uid: number) => Promise<ToggleEndorseResult>;
@@ -61,12 +62,26 @@ module.exports = function (Posts) {
 
     // Posts.endorse = async function (pid: number, uid: number) {
     Posts.endorse = async function (pid, uid) {
-        return await toggleEndorse('endorse', pid, uid);
+        const isInstr = await user.isInstructor(uid);
+        const isAdmin = await user.isAdministrator(uid);
+        if (isInstr || isAdmin) {
+            return await toggleEndorse('endorse', pid, uid);
+        }
+        if (!isInstr && !isAdmin) {
+            throw new Error('[[error:not-instructor]]');
+        }
     };
 
     // Posts.unendorse = async function (pid: number, uid: number) {
     Posts.unendorse = async function (pid, uid) {
-        return await toggleEndorse('unendorse', pid, uid);
+        const isInstr = await user.isInstructor(uid);
+        const isAdmin = await user.isAdministrator(uid);
+        if (isInstr || isAdmin) {
+            return await toggleEndorse('unendorse', pid, uid);
+        }
+        if (!isInstr && !isAdmin) {
+            throw new Error('[[error:not-instructor]]');
+        }
     };
 
     // Posts.hasEndorsed = async function (pid): Promise<BoolOrBoolArr> {

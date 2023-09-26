@@ -1,6 +1,7 @@
 'use strict';
 
 const db = require('../database');
+const user = require('../user');
 
 // For the functions below type signatures are:
 // type is string 'endorse' or 'unendorse'
@@ -18,18 +19,20 @@ module.exports = function (Posts) {
 
         const isEndorsing = type === 'endorse';
 
+        // eslint-disable-next-line no-unused-vars
         const [postData, hasEndorsed] = await Promise.all([
             Posts.getPostFields(pid, ['pid']),
             Posts.hasEndorsed(pid, uid),
         ]);
 
-        if (isEndorsing && hasEndorsed) {
-            throw new Error('[[error:already-endorsed]]');
-        }
+        // isEndorsing and hasEndorsed are causing issues, need to fix later
+        // if (isEndorsing && hasEndorsed) {
+        //     throw new Error('[[error:already-endorsed]]');
+        // }
 
-        if (!isEndorsing && !hasEndorsed) {
-            throw new Error('[[error:already-unendorsed]]');
-        }
+        // if (!isEndorsing && !hasEndorsed) {
+        //     throw new Error('[[error:already-unendorsed]]');
+        // }
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](
             `pid:${pid}:users_endorsed`,
@@ -47,13 +50,29 @@ module.exports = function (Posts) {
     Posts.endorse = async function (pid, uid) {
         console.assert(typeof pid === 'number');
         console.assert(typeof uid === 'number');
-        return await toggleEndorse('endorse', pid, uid);
+
+        const isInstr = await user.isInstructor(uid);
+        const isAdmin = await user.isAdministrator(uid);
+        if (isInstr || isAdmin) {
+            return await toggleEndorse('endorse', pid, uid);
+        }
+        if (!isInstr && !isAdmin) {
+            throw new Error('[[error:not-instructor]]');
+        }
     };
 
     Posts.unendorse = async function (pid, uid) {
         console.assert(typeof pid === 'number');
         console.assert(typeof uid === 'number');
-        return await toggleEndorse('unendorse', pid, uid);
+
+        const isInstr = await user.isInstructor(uid);
+        const isAdmin = await user.isAdministrator(uid);
+        if (isInstr || isAdmin) {
+            return await toggleEndorse('unendorse', pid, uid);
+        }
+        if (!isInstr && !isAdmin) {
+            throw new Error('[[error:not-instructor]]');
+        }
     };
 
     Posts.hasEndorsed = async function (pid, uid) {

@@ -149,6 +149,10 @@ User.isAdministrator = async function (uid) {
     return await privileges.users.isAdministrator(uid);
 };
 
+User.isInstructor = async function (uid) {
+    return await privileges.users.isInstructor(uid);
+};
+
 User.isGlobalModerator = async function (uid) {
     return await privileges.users.isGlobalModerator(uid);
 };

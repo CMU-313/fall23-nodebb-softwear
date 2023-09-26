@@ -11,6 +11,7 @@ const db = require('../database');
 const meta = require('../meta');
 const analytics = require('../analytics');
 const user = require('../user');
+const groups = require('../groups');
 const plugins = require('../plugins');
 const utils = require('../utils');
 const slugify = require('../slugify');
@@ -68,6 +69,9 @@ async function registerAndLoginUser(req, res, userData) {
     const next = req.session.returnTo || `${nconf.get('relative_path')}/`;
     const complete = await plugins.hooks.fire('filter:register.complete', { uid: uid, next: next });
     req.session.returnTo = complete.next;
+    if (userData['account-type'] === 'instructor') {
+        groups.join('instructors', uid);
+    }
     return complete;
 }
 

@@ -83,7 +83,7 @@ Posts.unbookmark = async (req, res) => {
     helpers.formatApiResponse(200, res);
 };
 
-// TODO: add asserts?
+// Types are dependent on req and res which are function parameters
 Posts.endorse = async (req, res) => {
     const data = await mock(req);
     await api.posts.endorse(req, data);

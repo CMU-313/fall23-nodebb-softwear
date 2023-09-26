@@ -1,34 +1,18 @@
 'use strict';
 
-// import db from '../database';
 const db = require('../database');
 const user = require('../user');
 
-// interface PostHandlerType {
-//     endorse: (pid: number, uid: number) => Promise<ToggleEndorseResult>;
-//     unendorse: (pid: number, uid: number) => Promise<ToggleEndorseResult>;
-//     getPostFields: (pid: number, field: string[]) => Promise<PostData>;
-//     hasEndorsed: (pid: NumberOrNumberArr) => Promise<BoolOrBoolArr>;
-//     setPostField: (pid: number, field: string, data: NumberOrNumberArr) => Promise<void>;
-// }
-
-// interface PostData {
-//     pid: number;
-//     endorse?: NumberOrNumberArr;
-// }
-
-// interface ToggleEndorseResult {
-//     post: PostData;
-//     isEndorsed: boolean;
-// }
-
-// type BoolOrBoolArr = boolean | boolean[]
-// type NumberOrNumberArr = number | number[]
-
-// module.exports = function (Posts: PostHandlerType) {
+// For the functions below type signatures are:
+// type is string 'endorse' or 'unendorse'
+// pid is number for the post ID
+// uid is number for the user ID
 module.exports = function (Posts) {
-    // async function toggleEndorse(type: string, pid: number, uid: number):Promise<ToggleEndorseResult> {
     async function toggleEndorse(type, pid, uid) {
+        console.assert(typeof type === 'string');
+        console.assert(typeof pid === 'number');
+        console.assert(typeof uid === 'number');
+
         if (parseInt(String(uid), 10) <= 0) {
             throw new Error('[[error:not-logged-in]]');
         }
@@ -50,7 +34,10 @@ module.exports = function (Posts) {
         //     throw new Error('[[error:already-unendorsed]]');
         // }
 
-        await db[isEndorsing ? 'setAdd' : 'setRemove'](`pid:${pid}:users_endorsed`, uid);
+        await db[isEndorsing ? 'setAdd' : 'setRemove'](
+            `pid:${pid}:users_endorsed`,
+            uid
+        );
         postData.endorsements = await db.setCount(`pid:${pid}:users_endorsed`);
         await Posts.setPostField(pid, 'endorsements', postData.endorsements);
 
@@ -60,8 +47,10 @@ module.exports = function (Posts) {
         };
     }
 
-    // Posts.endorse = async function (pid: number, uid: number) {
     Posts.endorse = async function (pid, uid) {
+        console.assert(typeof pid === 'number');
+        console.assert(typeof uid === 'number');
+
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
@@ -72,8 +61,10 @@ module.exports = function (Posts) {
         }
     };
 
-    // Posts.unendorse = async function (pid: number, uid: number) {
     Posts.unendorse = async function (pid, uid) {
+        console.assert(typeof pid === 'number');
+        console.assert(typeof uid === 'number');
+
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
@@ -84,8 +75,9 @@ module.exports = function (Posts) {
         }
     };
 
-    // Posts.hasEndorsed = async function (pid): Promise<BoolOrBoolArr> {
     Posts.hasEndorsed = async function (pid, uid) {
+        console.assert(typeof pid === 'number');
+        console.assert(typeof uid === 'number');
         return await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
     };
 };

@@ -273,7 +273,7 @@ postsAPI.unbookmark = async function (caller, data) {
     return await apiHelpers.postCommand(caller, 'unbookmark', 'bookmarked', '', data);
 };
 
-// TODO: add js asserts and types
+// Types are dependent on caller and data which are function parameters
 postsAPI.endorse = async function (caller, data) {
     return await apiHelpers.postCommand(caller, 'endorse', 'endorsed', '', data);
 };

@@ -43,6 +43,7 @@ define('forum/topic/events', [
         'posts.endorse': togglePostEndorse,
         'posts.unendorse': togglePostEndorse,
 
+
         'posts.upvote': togglePostVote,
         'posts.downvote': togglePostVote,
         'posts.unvote': togglePostVote,

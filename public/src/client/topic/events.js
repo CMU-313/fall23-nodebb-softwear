@@ -40,6 +40,10 @@ define('forum/topic/events', [
         'posts.bookmark': togglePostBookmark,
         'posts.unbookmark': togglePostBookmark,
 
+        // TODO: Add events for endorse?
+        // 'posts.bookmark': togglePostBookmark,
+        // 'posts.unbookmark': togglePostBookmark,
+
         'posts.upvote': togglePostVote,
         'posts.downvote': togglePostVote,
         'posts.unvote': togglePostVote,

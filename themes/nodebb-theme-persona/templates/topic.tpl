@@ -84,7 +84,6 @@
                     <!-- IMPORT partials/topic/post.tpl -->
                 </li>
                 {renderTopicEvents(@index, config.topicPostSort)}
-                {{{end}}}
             {{{end}}}
         </ul> 
 

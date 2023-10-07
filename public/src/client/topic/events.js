@@ -234,8 +234,10 @@ define('forum/topic/events', [
         }
 
         el.attr('data-endorsed', data.isEndorsed);
-        el.toggleClass('endorsed', data.endorse);
 
+        const post = $('[data-pid="' + data.post.pid + '"]').closest('[component="post"]');
+        post.toggleClass('endorsed', data.isEndorsed);
+    
         el.find('[component="post/endorse/on"]').toggleClass('hidden', !data.isEndorsed);
         el.find('[component="post/endorse/off"]').toggleClass('hidden', data.isEndorsed);
     }

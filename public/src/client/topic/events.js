@@ -243,6 +243,7 @@ define('forum/topic/events', [
     }
 
     function togglePostVote(data) {
+        console.log('Invoked toggle upvote function');
         const post = $('[data-pid="' + data.post.pid + '"]');
         post.find('[component="post/upvote"]').filter(function (index, el) {
             return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);

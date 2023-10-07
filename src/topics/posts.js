@@ -137,6 +137,7 @@ module.exports = function (Topics) {
                 postObj.editor = postObj.editor ? editors[postObj.editor] : null;
                 postObj.bookmarked = bookmarks[i];
                 postObj.endorsed = endorseData;
+                console.log('Endorse data is', endorseData);
                 postObj.upvoted = voteData.upvotes[i];
                 postObj.downvoted = voteData.downvotes[i];
                 postObj.votes = postObj.votes || 0;

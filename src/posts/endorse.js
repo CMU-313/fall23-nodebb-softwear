@@ -2,6 +2,7 @@
 
 const db = require('../database');
 const user = require('../user');
+const plugins = require('../plugins');
 
 // For the functions below type signatures are:
 // type is string 'endorse' or 'unendorse'
@@ -9,9 +10,12 @@ const user = require('../user');
 // uid is number for the user ID
 module.exports = function (Posts) {
     async function toggleEndorse(type, pid, uid) {
+        // alerts.error('Called toggle endorse');
         console.assert(typeof type === 'string');
-        console.assert(typeof pid === 'number');
+        // console.assert(typeof pid === 'string');
+        // console.log('Pid is of type', typeof pid);
         console.assert(typeof uid === 'number');
+        // console.log('Uid is of type', typeof uid);
 
         if (parseInt(String(uid), 10) <= 0) {
             throw new Error('[[error:not-logged-in]]');
@@ -33,13 +37,25 @@ module.exports = function (Posts) {
         // if (!isEndorsing && !hasEndorsed) {
         //     throw new Error('[[error:already-unendorsed]]');
         // }
+        // if (isEndorsing) {
+        //     await db.sortedSetAdd(`uid:${uid}:bookmarks`, Date.now(), pid);
+        // } else {
+        //     await db.sortedSetRemove(`uid:${uid}:bookmarks`, pid);
+        // }
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](
             `pid:${pid}:users_endorsed`,
             uid
         );
-        postData.endorsements = await db.setCount(`pid:${pid}:users_endorsed`);
-        await Posts.setPostField(pid, 'endorsements', postData.endorsements);
+        postData.endorsed = await db.setCount(`pid:${pid}:users_endorsed`);
+        await Posts.setPostField(pid, 'endorsed', postData.endorsed);
+
+        plugins.hooks.fire(`action:post.${type}`, {
+            pid: pid,
+            uid: uid,
+            owner: postData.uid,
+            current: hasEndorsed ? 'endorsed' : 'unendorsed',
+        });
 
         return {
             post: postData,
@@ -48,7 +64,8 @@ module.exports = function (Posts) {
     }
 
     Posts.endorse = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
+        console.log('endorse', pid);
+        // console.assert(typeof pid === 'string');
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
@@ -62,7 +79,7 @@ module.exports = function (Posts) {
     };
 
     Posts.unendorse = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
+        console.log('unendorse function called', pid);
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
@@ -76,8 +93,14 @@ module.exports = function (Posts) {
     };
 
     Posts.hasEndorsed = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
-        console.assert(typeof uid === 'number');
-        return await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
+        console.log('Called has endorsed');
+        console.log('pid is', pid);
+        if (Array.isArray(pid)) {
+            const sets = pid.map(pid => `pid:${pid}:users_endorsed`);
+            return await db.isMemberOfSets(sets, uid);
+        }
+        const result = await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
+        console.log('HasEndorsed result is', result);
+        return result;
     };
 };

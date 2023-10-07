@@ -85,12 +85,14 @@ Posts.unbookmark = async (req, res) => {
 
 // Types are dependent on req and res which are function parameters
 Posts.endorse = async (req, res) => {
+    console.log('post endorse controller called\n');
     const data = await mock(req);
     await api.posts.endorse(req, data);
     helpers.formatApiResponse(200, res);
 };
 
 Posts.unendorse = async (req, res) => {
+    console.log('post unendorse controller called\n');
     const data = await mock(req);
     await api.posts.unendorse(req, data);
     helpers.formatApiResponse(200, res);

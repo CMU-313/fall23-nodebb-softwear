@@ -64,18 +64,7 @@
         
         <ul component="topic" class="posts timeline" data-tid="{tid}" data-cid="{cid}">
             {{{each posts}}}
-                {{{if posts.hasEndorsed}}}
-                <li component="post" style="background-color:#F8FFEE;" class="{{{ if posts.deleted }}}deleted{{{ end }}} {{{ if posts.selfPost }}}self-post{{{ end }}} {{{ if posts.topicOwnerPost }}}topic-owner-post{{{ end }}}" <!-- IMPORT partials/data/topic.tpl -->>
-                    <a component="post/anchor" data-index="{posts.index}" id="{posts.index}"></a>
-
-                    <meta itemprop="datePublished" content="{posts.timestampISO}">
-                    <meta itemprop="dateModified" content="{posts.editedISO}">
-
-                    <!-- IMPORT partials/topic/post.tpl -->
-                </li>
-                {renderTopicEvents(@index, config.topicPostSort)}
-                {{{else}}}
-                <li component="post" class="{{{ if posts.deleted }}}deleted{{{ end }}} {{{ if posts.selfPost }}}self-post{{{ end }}} {{{ if posts.topicOwnerPost }}}topic-owner-post{{{ end }}}" <!-- IMPORT partials/data/topic.tpl -->>
+                <li component="post" class="{{{ if posts.deleted }}}deleted{{{ end }}} {{{ if posts.selfPost }}}self-post{{{ end }}} {{{ if posts.topicOwnerPost }}}topic-owner-post{{{ end }}} {{{ if posts.endorsed }}}endorsed{{{ end }}} <!-- IMPORT partials/data/topic.tpl -->">
                     <a component="post/anchor" data-index="{posts.index}" id="{posts.index}"></a>
 
                     <meta itemprop="datePublished" content="{posts.timestampISO}">

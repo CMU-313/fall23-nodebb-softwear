@@ -370,6 +370,7 @@ define('forum/topic/postTools', [
 
     function endorsePost(button, pid) {
         const method = button.attr('data-endorsed') === 'false' ? 'put' : 'del';
+        console.log('postTools.js', button.attr('data-endorsed'));
 
         api[method](`/posts/${pid}/endorse`, undefined, function (err) {
             if (err) {

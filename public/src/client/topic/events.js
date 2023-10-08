@@ -234,6 +234,7 @@ define('forum/topic/events', [
         }
 
         el.attr('data-endorsed', data.isEndorsed);
+        console.log('events.js', data.isEndorsed);
 
         const post = $('[data-pid="' + data.post.pid + '"]').closest('[component="post"]');
         post.toggleClass('endorsed', data.isEndorsed);

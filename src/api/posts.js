@@ -275,12 +275,10 @@ postsAPI.unbookmark = async function (caller, data) {
 
 // Types are dependent on caller and data which are function parameters
 postsAPI.endorse = async function (caller, data) {
-    console.log('post endorse api called\n');
     return await apiHelpers.postCommand(caller, 'endorse', 'endorsed', '', data);
 };
 
 postsAPI.unendorse = async function (caller, data) {
-    console.log('post unendorse api called\n');
     return await apiHelpers.postCommand(caller, 'unendorse', 'endorsed', '', data);
 };
 

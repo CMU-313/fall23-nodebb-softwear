@@ -2,7 +2,6 @@
 
 const db = require('../database');
 const user = require('../user');
-const plugins = require('../plugins');
 
 module.exports = function (Posts) {
     async function toggleEndorse(type, pid, uid) {
@@ -14,12 +13,7 @@ module.exports = function (Posts) {
         }
 
         const isEndorsing = type === 'endorse';
-        const [postData, hasEndorsed] = await Promise.all([
-            Posts.getPostFields(pid, ['pid']),
-            Posts.hasEndorsed(pid, uid),
-        ]);
-
-        console.log(hasEndorsed);
+        const postData = await Posts.getPostFields(pid, ['pid', 'endorsed']);
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](
             `pid:${pid}:users_endorsed`,
@@ -35,14 +29,12 @@ module.exports = function (Posts) {
     }
 
     Posts.endorse = async function (pid, uid) {
-        console.log('endorse invoked', pid, uid);
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
             const result = await toggleEndorse('endorse', pid, uid);
-            console.log('endorse returned', result);
             return result;
         }
         if (!isInstr && !isAdmin) {
@@ -51,14 +43,12 @@ module.exports = function (Posts) {
     };
 
     Posts.unendorse = async function (pid, uid) {
-        console.log('unendorse', pid, uid);
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
             const result = await toggleEndorse('unendorse', pid, uid);
-            console.log('endorse returned', result);
             return result;
         }
         if (!isInstr && !isAdmin) {

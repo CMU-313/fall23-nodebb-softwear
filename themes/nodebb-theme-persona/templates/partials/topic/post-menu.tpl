@@ -7,8 +7,8 @@
                     <i component="post/endorse/on" class="fas fa-circle <!-- IF !posts.endorsed -->hidden<!-- ENDIF !posts.endorsed -->"></i>
                     <i component="post/endorse/off" class="fas fa-check-circle <!-- IF posts.endorsed -->hidden<!-- ENDIF posts.endorsed -->"></i>
                 </span>
-                <span component="post/endorse/on" class="endorse-text <!-- IF !posts.endorsed -->hidden<!-- ENDIF !posts.endorsed -->">Unmark Post</span>
-                <span component="post/endorse/off" class="endorse-text <!-- IF posts.endorsed -->hidden<!-- ENDIF posts.endorsed -->">Mark Post as Correct</span>
+                <span component="post/endorse/on" class="endorse-option <!-- IF !posts.endorsed -->hidden<!-- ENDIF !posts.endorsed -->">Unmark Post</span>
+                <span component="post/endorse/off" class="endorse-option <!-- IF posts.endorsed -->hidden<!-- ENDIF posts.endorsed -->">Mark Post as Correct</span>
             </a>
         </li>
     </ul>

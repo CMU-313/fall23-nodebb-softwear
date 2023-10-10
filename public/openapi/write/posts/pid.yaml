@@ -64,6 +64,8 @@ get:
                     type: boolean
                   downvoted:
                     type: boolean
+                  endorsed:
+                    type: number
 put:
   tags:
     - posts

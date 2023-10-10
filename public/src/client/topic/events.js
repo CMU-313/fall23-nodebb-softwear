@@ -225,6 +225,7 @@ define('forum/topic/events', [
         el.find('[component="post/bookmark/off"]').toggleClass('hidden', data.isBookmarked);
     }
 
+    // Toggling the front-end endorsement state of a post
     function togglePostEndorse(data) {
         const el = $('[data-pid="' + data.post.pid + '"] [component="post/endorse"]').filter(function (index, el) {
             return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
@@ -234,7 +235,6 @@ define('forum/topic/events', [
         }
 
         el.attr('data-endorsed', data.isEndorsed);
-        console.log('events.js', data.isEndorsed);
 
         const post = $('[data-pid="' + data.post.pid + '"]').closest('[component="post"]');
         post.toggleClass('endorsed', data.isEndorsed);
@@ -244,7 +244,6 @@ define('forum/topic/events', [
     }
 
     function togglePostVote(data) {
-        console.log('Invoked toggle upvote function');
         const post = $('[data-pid="' + data.post.pid + '"]');
         post.find('[component="post/upvote"]').filter(function (index, el) {
             return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);

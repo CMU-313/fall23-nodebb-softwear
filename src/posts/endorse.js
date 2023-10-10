@@ -3,6 +3,10 @@
 const db = require('../database');
 const user = require('../user');
 
+// For the functions below type signatures are:
+// type is string 'endorse' or 'unendorse'
+// pid is non-deterministic (could be array or a single object)
+// uid is number for the user ID
 module.exports = function (Posts) {
     async function toggleEndorse(type, pid, uid) {
         console.assert(typeof type === 'string');

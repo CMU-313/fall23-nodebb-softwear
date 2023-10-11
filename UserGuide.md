@@ -15,4 +15,12 @@ However, when clicking it, there will be an error generated at the bottom right 
 
 **Where to Find Testing File / How to Run Test**
 
+The tests are in test/posts.js line 310-340, with the description being "endorsing". The tests covered testing the various cases in which instructors and non-instructors endorse/unendorse posts, and testing hasEndorsed on multiple posts. The tests are mostly focused on the backend and database result side, since frontend will be hard to test with automated testcases. The backend functions implemented functionalities of being able to endorse/unendorse posts and make sure multiple posts result are correct, and permission control on only the instructors can endorse a post. Therefore, the test cases have covered the functionalities that we added.
+
+In order to run the test locally, follow the following steps:
+
+`$ redis-server`
+
+`$ npm run test`
+
 **Test Coverage/How Test Sufficiently Covers Change**

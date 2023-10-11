@@ -368,14 +368,18 @@ define('forum/topic/postTools', [
         return false;
     }
 
+    // according to the button status, send a put or del request to the server backend
     function endorsePost(button, pid) {
+        console.assert(typeof pid === 'string', 'pid must be a string');
         const method = button.attr('data-endorsed') === 'false' ? 'put' : 'del';
+        console.assert(typeof method === 'string', 'method must be a string');
 
         api[method](`/posts/${pid}/endorse`, undefined, function (err) {
             if (err) {
                 return alerts.error(err);
             }
             const type = method === 'put' ? 'endorse' : 'unendorse';
+            console.assert(typeof type === 'string', 'type must be a string');
             hooks.fire(`action:post.${type}`, { pid: pid });
         });
         return false;

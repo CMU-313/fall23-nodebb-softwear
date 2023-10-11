@@ -337,6 +337,21 @@ describe('Post\'s', () => {
             const hasEndorsed = await posts.hasEndorsed(postData.pid, instructorUid);
             assert.equal(hasEndorsed, false);
         });
+
+        it('should return multiple endorse status if requested for multiple posts', async () => {
+            const userOneUid = await user.create({ username: 'user1' });
+            const postResult = await topics.post({ uid: userOneUid, cid: cid, title: 'change owner', content: 'original post' });
+            const postData = await topics.reply({ uid: userOneUid, tid: postResult.topicData.tid, content: 'firstReply' });
+            const pid1 = postResult.postData.pid;
+            const pid2 = postData.pid;
+            const data1 = await apiPosts.endorse({ uid: instructorUid }, { pid: pid1, room_id: `topic_${postData.tid}` });
+            const data2 = await apiPosts.unendorse({ uid: instructorUid }, { pid: pid2, room_id: `topic_${postData.tid}` });
+            assert.equal(data1.isEndorsed, true);
+            assert.equal(data2.isEndorsed, false);
+            const hasEndorsed = await posts.hasEndorsed([pid1, pid2], instructorUid);
+            assert.equal(hasEndorsed[0], true);
+            assert.equal(hasEndorsed[1], false);
+        });
     });
 
     describe('post tools', () => {

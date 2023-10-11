@@ -5,12 +5,11 @@ const user = require('../user');
 
 // For the functions below type signatures are:
 // type is string 'endorse' or 'unendorse'
-// pid is number for the post ID
+// pid is non-deterministic (could be array or a single object)
 // uid is number for the user ID
 module.exports = function (Posts) {
     async function toggleEndorse(type, pid, uid) {
         console.assert(typeof type === 'string');
-        console.assert(typeof pid === 'number');
         console.assert(typeof uid === 'number');
 
         if (parseInt(String(uid), 10) <= 0) {
@@ -18,28 +17,14 @@ module.exports = function (Posts) {
         }
 
         const isEndorsing = type === 'endorse';
-
-        // eslint-disable-next-line no-unused-vars
-        const [postData, hasEndorsed] = await Promise.all([
-            Posts.getPostFields(pid, ['pid']),
-            Posts.hasEndorsed(pid, uid),
-        ]);
-
-        // isEndorsing and hasEndorsed are causing issues, need to fix later
-        // if (isEndorsing && hasEndorsed) {
-        //     throw new Error('[[error:already-endorsed]]');
-        // }
-
-        // if (!isEndorsing && !hasEndorsed) {
-        //     throw new Error('[[error:already-unendorsed]]');
-        // }
+        const postData = await Posts.getPostFields(pid, ['pid', 'endorsed']);
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](
             `pid:${pid}:users_endorsed`,
             uid
         );
-        postData.endorsements = await db.setCount(`pid:${pid}:users_endorsed`);
-        await Posts.setPostField(pid, 'endorsements', postData.endorsements);
+        postData.endorsed = await db.setCount(`pid:${pid}:users_endorsed`);
+        await Posts.setPostField(pid, 'endorsed', postData.endorsed);
 
         return {
             post: postData,
@@ -48,13 +33,13 @@ module.exports = function (Posts) {
     }
 
     Posts.endorse = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
-            return await toggleEndorse('endorse', pid, uid);
+            const result = await toggleEndorse('endorse', pid, uid);
+            return result;
         }
         if (!isInstr && !isAdmin) {
             throw new Error('[[error:not-instructor]]');
@@ -62,13 +47,13 @@ module.exports = function (Posts) {
     };
 
     Posts.unendorse = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
         console.assert(typeof uid === 'number');
 
         const isInstr = await user.isInstructor(uid);
         const isAdmin = await user.isAdministrator(uid);
         if (isInstr || isAdmin) {
-            return await toggleEndorse('unendorse', pid, uid);
+            const result = await toggleEndorse('unendorse', pid, uid);
+            return result;
         }
         if (!isInstr && !isAdmin) {
             throw new Error('[[error:not-instructor]]');
@@ -76,8 +61,11 @@ module.exports = function (Posts) {
     };
 
     Posts.hasEndorsed = async function (pid, uid) {
-        console.assert(typeof pid === 'number');
-        console.assert(typeof uid === 'number');
+        if (Array.isArray(pid)) {
+            const sets = pid.map(pid => `pid:${pid}:users_endorsed`);
+            return await db.isMemberOfSets(sets, uid);
+        }
+
         return await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
     };
 };

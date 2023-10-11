@@ -409,6 +409,8 @@ UserObjectFull:
       type: boolean
     isGlobalModerator:
       type: boolean
+    isInstr:
+      type: boolean
     isModerator:
       type: boolean
     isAdminOrGlobalModerator:

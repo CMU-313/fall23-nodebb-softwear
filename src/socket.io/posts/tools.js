@@ -21,6 +21,7 @@ module.exports = function (SocketPosts) {
         const results = await utils.promiseParallel({
             posts: posts.getPostFields(data.pid, ['deleted', 'bookmarks', 'uid', 'ip', 'flagId']),
             isAdmin: user.isAdministrator(socket.uid),
+            isInstr: user.isInstructor(socket.uid),
             isGlobalMod: user.isGlobalModerator(socket.uid),
             isModerator: user.isModerator(socket.uid, data.cid),
             canEdit: privileges.posts.canEdit(data.pid, socket.uid),

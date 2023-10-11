@@ -77,6 +77,7 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
 
     const results = await utils.promiseParallel({
         isAdmin: user.isAdministrator(req.uid),
+        isInstr: user.isInstructor(req.uid),
         isGlobalMod: user.isGlobalModerator(req.uid),
         isModerator: user.isModeratorOfAnyCategory(req.uid),
         privileges: privileges.global.get(req.uid),
@@ -97,6 +98,7 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
 
     results.user.unreadData = unreadData;
     results.user.isAdmin = results.isAdmin;
+    results.user.isInstr = results.isInstr;
     results.user.isGlobalMod = results.isGlobalMod;
     results.user.isMod = !!results.isModerator;
     results.user.privileges = results.privileges;
@@ -119,6 +121,7 @@ middleware.renderHeader = async function renderHeader(req, res, data) {
         unreadData,
     }));
     templateValues.isAdmin = results.user.isAdmin;
+    templateValues.isInstr = results.user.isInstr;
     templateValues.isGlobalMod = results.user.isGlobalMod;
     templateValues.showModMenu = results.user.isAdmin || results.user.isGlobalMod || results.user.isMod;
     templateValues.canChat = results.privileges.chat && meta.config.disableChat !== 1;

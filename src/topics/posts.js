@@ -158,8 +158,12 @@ module.exports = function (Topics) {
         return result.posts;
     };
 
-    Topics.modifyPostsByPrivilege = function (topicData, topicPrivileges) {
+    Topics.modifyPostsByPrivilege = async function (topicData, topicPrivileges) {
         const loggedIn = parseInt(topicPrivileges.uid, 10) > 0;
+
+        // you have to do the awaits seperately or the logic doesn't work
+        const can_endorse_instr = await user.isInstructor(topicPrivileges.uid);
+        const can_endorse_admin = await user.isAdministrator(topicPrivileges.uid);
         topicData.posts.forEach((post) => {
             if (post) {
                 post.topicOwnerPost = parseInt(topicData.uid, 10) === parseInt(post.uid, 10);
@@ -173,7 +177,7 @@ module.exports = function (Topics) {
                         (post.deleted && parseInt(post.deleterUid, 10) === parseInt(topicPrivileges.uid, 10)))) ||
                     ((loggedIn || topicData.postSharing.length) && !post.deleted);
                 post.ip = topicPrivileges.isAdminOrMod ? post.ip : undefined;
-
+                post.can_display_post = can_endorse_instr || can_endorse_admin;
                 posts.modifyPostByPrivilege(post, topicPrivileges);
             }
         });

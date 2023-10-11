@@ -49,6 +49,7 @@ module.exports = function (Groups) {
             Promise.all(privateGroups.map(group => Groups.ownership.isOwner(uid, group.name))),
             user.isAdministrator(uid),
             user.isGlobalModerator(uid),
+            user.isInstructor(uid),
         ]);
         const ownGroups = privateGroups.filter((group, index) => ownership[index]);
 

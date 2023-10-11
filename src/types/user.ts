@@ -64,6 +64,7 @@ export type UserObjectFull = UserObject & {
   theirid: number;
   isTargetAdmin: boolean;
   isAdmin: boolean;
+  isInstr: boolean;
   isGlobalModerator: boolean;
   isModerator: boolean;
   isAdminOrGlobalModerator: boolean;

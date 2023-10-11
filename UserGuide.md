@@ -10,7 +10,7 @@ When endorsing a reply, indications will both show on the thread view (that coul
 When unendorsing a reply, indications will be gone and turn into a normal post where no additional designs are applied from the original NodeBB post. 
 Keep in mind no other type of user could endorse the post. More details could be seen below. 
 
-As different types of users other than instructor, a user will not be able to see "Mark Post as Correct" or "Unmark Post" when clicking the three dots on the individual topics view. Thus eliminating confusion of whether they could endorse a function and give the privilege to only instructors who will only be able determine which post gets endorsed.
+As different types of users other than instructor, a user will not be able to access the "Mark Post as Correct" or "Unmark Post" functionality, since they won't be able to see the three dots at all. Thus eliminating confusion of whether they could endorse a function and give the privilege to only instructors who will only be able determine which post gets endorsed.
 
 **Where to Find Testing File / How to Run Test**
 

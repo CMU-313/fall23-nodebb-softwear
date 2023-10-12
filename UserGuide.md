@@ -1,6 +1,7 @@
 **The User Guide will outline how to see the changes made by the team and specifics on testing**
 
 **How to View Changes**
+
 When entering NodeBB, the homepage has four separate sections: Announcements, General Discussion, Comments & Feedback & Blogs. 
 For each of these section, a user could create a post and reply to a different post. Both post and reply in high level are considered posts.
 
@@ -14,7 +15,7 @@ As different types of users other than instructor, a user will not be able to ac
 
 **Where to Find Testing File / How to Run Test**
 
-The tests are in test/posts.js line 310-340, with the description being "endorsing". The tests covered testing the various cases in which instructors and non-instructors endorse/unendorse posts, and testing hasEndorsed on multiple posts. The tests are mostly focused on the backend and database result side, since frontend will be hard to test with automated testcases. The backend functions implemented functionalities of being able to endorse/unendorse posts and make sure multiple posts result are correct, and permission control on only the instructors can endorse a post. Therefore, the test cases have covered the functionalities that we added.
+The tests are in `test/posts.js` line 310-340, with the description being "endorsing".
 
 In order to run the test locally, follow the following steps:
 
@@ -23,3 +24,5 @@ In order to run the test locally, follow the following steps:
 `$ npm run test`
 
 **Test Coverage/How Test Sufficiently Covers Change**
+
+The tests covered testing the various cases in which instructors and non-instructors endorse/unendorse posts, and testing hasEndorsed on multiple posts. The tests are mostly focused on the backend and database result side, since frontend will be hard to test with automated testcases. The backend functions implemented functionalities of being able to endorse/unendorse posts and make sure multiple posts result are correct, and permission control on only the instructors can endorse a post. Therefore, the test cases have covered the functionalities that we added.

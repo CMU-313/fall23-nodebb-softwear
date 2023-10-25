@@ -14,10 +14,7 @@
         "lint": "npx tsc && eslint --cache ./nodebb .",
         "test": "npx tsc && nyc --reporter=html --reporter=text-summary mocha",
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
-        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
-        "build": "babel src/ -d lib/",
-        "flow": "flow | tee log/flow.log",
-        "test:mutation": "stryker run"
+        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage"
     },
     "nyc": {
         "exclude": [
@@ -150,13 +147,8 @@
     },
     "devDependencies": {
         "@apidevtools/swagger-parser": "^10.1.0",
-        "@babel/cli": "^7.23.0",
-        "@babel/core": "^7.23.2",
-        "@babel/preset-flow": "^7.22.15",
         "@commitlint/cli": "17.3.0",
         "@commitlint/config-angular": "17.3.0",
-        "@stryker-mutator/core": "^7.3.0",
-        "@stryker-mutator/jest-runner": "^7.3.0",
         "@types/async": "^3.2.16",
         "@types/express": "^4.17.15",
         "@types/lodash": "^4.14.191",
@@ -169,7 +161,6 @@
         "eslint": "^8.31.0",
         "eslint-config-nodebb": "0.2.1",
         "eslint-plugin-import": "2.26.0",
-        "flow-bin": "^0.219.5",
         "grunt": "1.5.3",
         "grunt-contrib-watch": "1.1.0",
         "husky": "8.0.2",

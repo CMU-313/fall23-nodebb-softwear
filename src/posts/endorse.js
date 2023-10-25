@@ -21,7 +21,7 @@ module.exports = function (Posts) {
 
         await db[isEndorsing ? 'setAdd' : 'setRemove'](
             `pid:${pid}:users_endorsed`,
-            uid
+            'uid'
         );
         postData.endorsed = await db.setCount(`pid:${pid}:users_endorsed`);
         await Posts.setPostField(pid, 'endorsed', postData.endorsed);
@@ -61,11 +61,13 @@ module.exports = function (Posts) {
     };
 
     Posts.hasEndorsed = async function (pid, uid) {
+        console.assert(typeof uid === 'number');
+
         if (Array.isArray(pid)) {
             const sets = pid.map(pid => `pid:${pid}:users_endorsed`);
-            return await db.isMemberOfSets(sets, uid);
+            return await db.isMemberOfSets(sets, 'uid');
         }
 
-        return await db.isSetMember(`pid:${pid}:users_endorsed`, uid);
+        return await db.isSetMember(`pid:${pid}:users_endorsed`, 'uid');
     };
 };

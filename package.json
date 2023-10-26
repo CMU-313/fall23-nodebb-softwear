@@ -17,7 +17,8 @@
         "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
         "build": "babel src/ -d lib/",
         "flow": "flow | tee log/flow.log",
-        "test:mutation": "stryker run"
+        "test:mutation:cleanup": "find build/public/plugins -type l -exec ./replace_symbol_link.sh {} +",
+        "test:mutation": "npm run test:mutation:cleanup; stryker run"
     },
     "nyc": {
         "exclude": [
@@ -174,6 +175,7 @@
         "grunt-contrib-watch": "1.1.0",
         "husky": "8.0.2",
         "ignore-loader": "^0.1.2",
+        "jest": "^29.7.0",
         "jsdom": "20.0.3",
         "lint-staged": "13.1.0",
         "mocha": "10.2.0",

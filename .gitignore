@@ -63,9 +63,11 @@ tx.exe
 coverage
 .nyc_output
 
+*.log
 test/files/normalise.jpg.png
 test/files/normalise-resized.jpg
 package-lock.json
+/package.json
 *.mongodb
 link-plugins.sh
 test.sh
@@ -80,6 +82,3 @@ theme/*.sublime-workspace
 theme/.idea
 theme/.vscode
 theme/node_modules/
-
-# Ignore files compiled when using flow
-/lib

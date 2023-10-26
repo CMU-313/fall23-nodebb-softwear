@@ -8,6 +8,12 @@
     "progress",
     "dashboard"
   ],
+  "buildCommand": "tsc -b tsconfig.json",
+  "checkers": ["typescript"],
+  "tsconfigFile": "tsconfig.json",
+  "typescriptChecker": {
+    "prioritizePerformanceOverAccuracy": true
+  },
   "jest": {
     "projectType": "custom",
     "configFile": "package.json",

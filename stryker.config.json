@@ -16,10 +16,7 @@
   },
   "jest": {
     "projectType": "custom",
-    "configFile": "package.json",
-    "config": {
-      "testEnvironment": "jest-environment-jsdom-sixteen"
-    },
+    "configFile": "jest.config.js",
     "enableFindRelatedTests": true
   },
   "testRunner": "jest",

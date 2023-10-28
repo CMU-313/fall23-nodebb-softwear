@@ -98,6 +98,7 @@ prestart.versionCheck();
 
 if (!configExists && process.argv[2] !== 'setup') {
     require('./setup').webInstall();
+    process.exit(0);
 }
 
 process.env.CONFIG = configFile;

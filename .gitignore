@@ -81,5 +81,8 @@ theme/.idea
 theme/.vscode
 theme/node_modules/
 
+# stryker temp files
+.stryker-tmp
+
 # Ignore files compiled when using flow
 /lib

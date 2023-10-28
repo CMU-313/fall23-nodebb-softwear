@@ -16,7 +16,8 @@
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
         "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
         "build": "babel src/ -d lib/",
-        "flow": "flow | tee log/flow.log"
+        "flow": "flow | tee log/flow.log",
+        "format": "prettier --write 'src/**/*.js'"
     },
     "nyc": {
         "exclude": [
@@ -177,6 +178,7 @@
         "mocha-lcov-reporter": "1.3.0",
         "mockdate": "3.0.5",
         "nyc": "15.1.0",
+        "prettier": "^3.0.3",
         "smtp-server": "3.11.0",
         "typescript": "^4.9.4"
     },

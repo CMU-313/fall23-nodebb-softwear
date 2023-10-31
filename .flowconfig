@@ -1,11 +1,24 @@
 [ignore]
+.*/node_modules/.*
+.*/bower_components/.*
+.*/coverage/.*
+.*/lib/.*
+.*/logs/.*
+.*/public/.*
+.*/tmp/.*
+.*/vendor/.*
+.*/__tests__/.*
+.*/flow-typed/.*
 
 [include]
+*/src/*.js
+*/test/*.js
 
 [libs]
 
 [lints]
 
 [options]
+module.name_mapper='^test/\(.*\)$' -> '<PROJECT_ROOT>/test/\1'
 
 [strict]
